@@ -21,7 +21,7 @@
 action :configure do
 
   service 'newrelic-daemon' do
-    supports status: true, start: true, stop: true, restart: true
+    supports :status => true, :start => true, :stop => true, :restart => true
   end
 
   # ensure that the file #{new_resource.daemon_upgrade_file}
@@ -62,7 +62,7 @@ action :configure do
         group     new_resource.group
         mode      new_resource.mode
 
-        variables config: new_resource
+        variables :config => new_resource
 
         notifies :restart, "service[newrelic-daemon]", :immediately
         notifies :restart, "service[#{new_resource.server_service_name}]", :delayed
@@ -88,7 +88,7 @@ action :configure do
     group     new_resource.group
     mode      new_resource.mode
 
-    variables config: new_resource
+    variables :config => new_resource
 
     notifies :restart, "service[#{new_resource.server_service_name}]", :delayed
   end

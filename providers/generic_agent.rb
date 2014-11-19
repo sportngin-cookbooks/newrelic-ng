@@ -77,9 +77,9 @@ def configure_agent
     mode      00644
     source    'generic-agent.yml.erb'
     cookbook  'newrelic-ng'
-    variables license_key: new_resource.license_key,
-              plugin_name: new_resource.plugin_name,
-              config:      new_resource.config
+    variables :license_key => new_resource.license_key,
+              :plugin_name => new_resource.plugin_name,
+              :config =>      new_resource.config
   end
   new_resource.updated_by_last_action(true) if r.updated_by_last_action?
 
@@ -87,7 +87,7 @@ def configure_agent
 
   service "newrelic_plugin_#{new_resource.plugin_name}" do
     provider        Chef::Provider::Service::Simple
-    supports        status: true
+    supports        :status => true
     start_command   "su #{new_resource.owner} -c '#{daemon} start'"
     stop_command    "su #{new_resource.owner} -c '#{daemon} stop'"
     restart_command "su #{new_resource.owner} -c '#{daemon} restart'"
