@@ -88,12 +88,12 @@ def configure_agent
   service "newrelic_plugin_#{new_resource.plugin_name}" do
     provider        Chef::Provider::Service::Simple
     supports        :status => true
-    start_command   "su #{new_resource.owner} -c '#{daemon} start'"
-    stop_command    "su #{new_resource.owner} -c '#{daemon} stop'"
-    restart_command "su #{new_resource.owner} -c '#{daemon} restart'"
+    start_command   "cd #{new_resource.target_dir}/#{new_resource.plugin_name} && su #{new_resource.owner} -c '#{daemon} start'"
+    stop_command    "cd #{new_resource.target_dir}/#{new_resource.plugin_name} && su #{new_resource.owner} -c '#{daemon} stop'"
+    restart_command "cd #{new_resource.target_dir}/#{new_resource.plugin_name} && su #{new_resource.owner} -c '#{daemon} restart'"
 
     # status always returns 0, so we're grepping for pid as a workaround
-    status_command  "su #{new_resource.owner} -c '#{daemon} status |grep -q pid'"
+    status_command  "cd #{new_resource.target_dir}/#{new_resource.plugin_name} && su #{new_resource.owner} -c '#{daemon} status |grep -q pid'"
 
     subscribes      :restart, "template[#{config_file}]"
     action          :start
